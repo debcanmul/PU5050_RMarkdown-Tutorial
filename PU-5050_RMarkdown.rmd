@@ -5,6 +5,10 @@ date: "02/12/2021"
 output: html_document
 ---
 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
 Comment: If I have time complete the following - design of document, colour, images.
 ***
 
