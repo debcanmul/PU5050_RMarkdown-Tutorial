@@ -1,1 +1,29 @@
+---
+title: "R-Studio Tutorial"
+author: "Student No: 52102609"
+date: "02/12/2021"
+output: html_document
+---
 
+Comment: If I have time complete the following - design of document, colour, images.
+***
+
+## 1. Introduction
+
+***
+
+## 2. RMarkdown
+
+***
+
+## 3. Data Preparation
+
+***
+
+## 4. Data Visualisation
+
+***
+
+## 5. Summary and Reflection
+
+***
