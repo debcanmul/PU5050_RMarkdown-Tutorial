@@ -183,23 +183,65 @@ pre code {
 </div>
 <div id="data-preparation" class="section level2">
 <h2>3. Data Preparation</h2>
-<p>Before we can start to prepare data we need to complete the following three steps.</p>
-<ol style="list-style-type: decimal">
-<li>Install the packages</li>
-<li>Read the packages into R</li>
-<li>Read in the data sets</li>
-</ol>
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 4.1.2</code></pre>
-<pre><code>## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --</code></pre>
-<pre><code>## v ggplot2 3.3.5     v purrr   0.3.4
-## v tibble  3.1.4     v dplyr   1.0.7
-## v tidyr   1.1.3     v stringr 1.4.0
-## v readr   2.0.2     v forcats 0.5.1</code></pre>
-<pre><code>## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()</code></pre>
+<p>Before we can start to prepare data we need to complete the follow steps 3.1 - 3.3.</p>
+<div id="install-the-packages" class="section level3">
+<h3>3.1 Install the packages</h3>
+<p>First you want to install the packages you will need to work with the data. I have already installed the packages so for you, you would enter the following code.</p>
+<ul>
+<li>Start a new markdown file (2.2.1)<br />
+</li>
+<li>Start a new code chunk (2.2.3)</li>
+</ul>
+<p>Then type in the following code.</p>
+<p><strong>install.packages(tidyverse)</strong><br />
+<strong>install.packages(here)</strong></p>
+</div>
+<div id="read-the-packages-into-r" class="section level3">
+<h3>3.2 Read the packages into R</h3>
+<pre class="r"><code># These are the packages we will use to work with the data.
+library(tidyverse)
+library(here)</code></pre>
+</div>
+<div id="read-in-the-data-sets" class="section level3">
+<h3>3.3 Read in the data sets</h3>
+<p>R-Software is case sensitive, so if you name an object with all lower case letters, R will only recognise the name in this form.</p>
+<p>Explain objects and assignment operators</p>
+<pre class="r"><code>demographics&lt;-read_csv(here(&quot;2021-12-02_PU5050_Assessment_Input/2021-12-02_PU5050_Demographics.csv&quot;))
+ImagingWaitTimes&lt;-read_csv(here(&quot;2021-12-02_PU5050_Assessment_Input/2021-12-02_PU5050_ImagingWaitTimes.csv&quot;))</code></pre>
+</div>
+<div id="inspect-the-data" class="section level3">
+<h3>3.4 Inspect the data</h3>
+<p>Now that we have the data loaded into R, using the object names demographics and ImagingWaitTimes, we can start to inspect the data. Let’s look at demographics first..</p>
+<pre class="r"><code># We will use a function called glimpse to look at the variable names within the data set
+glimpse(demographics)</code></pre>
+<pre><code>## Rows: 100
+## Columns: 4
+## $ chi  &lt;dbl&gt; 2865914370, 7429183650, 2041536789, 6705438219, 9598617423, 47351~
+## $ dob  &lt;chr&gt; &quot;04/06/1950&quot;, &quot;14/08/1950&quot;, &quot;16/03/1951&quot;, &quot;11/07/1951&quot;, &quot;26/10/19~
+## $ sex  &lt;chr&gt; &quot;female&quot;, &quot;male&quot;, NA, &quot;male&quot;, &quot;female&quot;, &quot;male&quot;, &quot;female&quot;, &quot;male&quot;,~
+## $ city &lt;chr&gt; &quot;Inverness&quot;, &quot;Edinburgh&quot;, &quot;Dundee&quot;, NA, &quot;Glasgow&quot;, &quot;Glasgow&quot;, &quot;Gl~</code></pre>
+<p>We can see that the data has 4 columns: chi, dob, sex and city. Explain double/character</p>
+<p>Another function to look at the data</p>
+<pre class="r"><code>head(demographics)</code></pre>
+<pre><code>## # A tibble: 6 x 4
+##          chi dob        sex    city     
+##        &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;  &lt;chr&gt;    
+## 1 2865914370 04/06/1950 female Inverness
+## 2 7429183650 14/08/1950 male   Edinburgh
+## 3 2041536789 16/03/1951 &lt;NA&gt;   Dundee   
+## 4 6705438219 11/07/1951 male   &lt;NA&gt;     
+## 5 9598617423 26/10/1951 female Glasgow  
+## 6 4735162809 18/03/1954 male   Glasgow</code></pre>
+<p>Again we can see there are 4 groups and the types of data.</p>
+<p>Now that we have an understanding of the variable names and type of variables we need to look in more detail for missing values, NA, and any unusual data values.</p>
+<pre class="r"><code>demographics%&gt;%
+  summarise_all(~sum(is.na(.)))</code></pre>
+<pre><code>## # A tibble: 1 x 4
+##     chi   dob   sex  city
+##   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+## 1     0     2     2     2</code></pre>
 <hr />
+</div>
 </div>
 <div id="data-visualisation" class="section level2">
 <h2>4. Data Visualisation</h2>
