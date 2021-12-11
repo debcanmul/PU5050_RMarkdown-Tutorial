@@ -1,0 +1,59 @@
+---
+title: "TutorialDesignPlan"
+author: "Debbie Cannon"
+date: "11/12/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Introduction  
+(Scenario - **What is the average waiting time in days for CT scans for each Scottish city in October 2021?**)
+
+Discuss the metadata and data dictionary
+
+### Objectives
+* What are the benefits of reproducibility in science? 
+* Why use R?
+
+## 2. R markdown
+### Objectives
+* What is R markdown and why is it useful for reproducible science? 
+Explain the following: 
+* file header means
+* how to add text and code chunks
+* basic formatting in the text chunks (headers and lists) 
+* how to include inline code
+* how to specify the output file type
+* how to build the output
+
+## 3. Data Preparation
+### Objectives
+* What is the importance of good metadata? 
+* Why are fake datasets useful? 
+* What is the benefit of tidy datasets? 
+
+
+```{r}
+# Read in the datasets, inspect them, and remove errors and missing values. Join the two datasets.
+```
+
+## 4. Data Visualisation
+### Objectives
+* what are the main parameters ggplot uses for making graphs?
+
+```{r}
+# With your research question in mind, create at least one plot with default aesthetics improve it
+
+```
+
+* Explain the decisions you make in the text
+
+## 5. Summary and Reflection
+### Objectives
+* What has been your experience using R for reproducible data analysis? 
+* Please reflect on any problems or issues you encountered, for example whilst creating and merging datasets, or using the R language.
+
+
