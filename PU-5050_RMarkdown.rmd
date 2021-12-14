@@ -1,22 +1,58 @@
 ---
 title: "R-Studio Tutorial"
-author: "Student No: 52102609"
+author: 'Student No: 52102609'
 date: "02/12/2021"
-output: html_document
+output: 
+  pdf_document:
+    toc: yes
+  
 ---
 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-Comment: If I have time complete the following - design of document, colour, images.
+Comment: If I have time complete the following - design of document, colour,
 ***
 
 ## 1. Introduction
+Reproducible:  
+
+> A result is reproducible when the same analysis steps performed  on the same dataset consistently produces the same answer. 
+
+
+
+
+
+
+
 
 ***
 
 ## 2. RMarkdown
+ 
+Have you ever used the internet?  
+The internet uses a language called HTML 
+(Hypertext Markup Language). RMarkdown uses a similar language to link data, code, methods results, graphs and charts to produce an integrated formatted document. This tutorial was created in RMarkdown. 
+
+Have you ever completed a project and then realise there is an error in the data?  
+This probably took some time to fix if the graphs were created in Excel, the analysis in statistical software and the written text in Word. In RMarkdown you can create everything in the RMarkdown file. If you change the data and then run the RMarkdown file all the changes are done for you. 
+
+So how does this help reproducibility?  
+
+*File/New File/RMarkdown*
+
+```{r, echo=FALSE, fig.align='center', out.width='150%'}
+library(knitr)
+include_graphics("Images/Image 1 Open RMarkdown.png")
+### 2.1 RMarkdown File Header
+
+```
+### 2.2 Text and Code Chunks
+### 2.3 Headers and Lists in Text Chunks
+### 2.4 Inline Code
+### 2.5 Output File Type Specification
+### 2.6 Generation of Output
 
 ***
 
@@ -69,6 +105,8 @@ glimpse(demographics)
 We can see that the data has 4 columns: chi, dob, sex and city.
 Explain double/character
 
+***
+
 Another function to look at the data 
 
 ```{r 3.4.2 Head}
@@ -78,19 +116,238 @@ Again we can see there are 4 groups and the types of data.
 
 Now that we have an understanding of the variable names and type of variables we need to look in more detail for missing values, NA, and any unusual data values. 
 
+I'm going to show you first of all how to find the number of missing values in a single column. 
+
+```{r}
+demographics%>%
+  filter(is.na(dob))%>%
+summarise(n())
+```
+This shows that within the column dob there are 2 missing values. We want to remove these
+and save the results to a new object. Let's call the filtered data filtered_dob. 
+
+```{r}
+filtered_dob<-demographics%>%
+  filter(!is.na(dob))%>%
+  view()
+```
+If we now check how many missing values there are in the dob column in filtered_dob.
+
+```{r}
+filtered_dob%>%
+  filter(is.na(dob))%>%
+  summarise(n())
+```
+We can see now that the missing values have been removed within the new filtered data. Now if we were to continue with this method we would have to work our way along one column at a time. We would check for the number of missing values, save the new filtered data to a new object, remove the missing values and finally check the values have been removed. However, there is a way we can check all the columns at the same time.
 ```{r}
 demographics%>%
   summarise_all(~sum(is.na(.)))
+```
+We have looked at the original demographics file and we can see there are 2 missing values in the columns dob, sex and city. Let's remove them and call the new object demo_filter
+
+```{r}
+demo_filter<-demographics%>%
+  na.omit()%>%
+view()
+```
+Let's check that all the missing values have been removed.
+```{r}
+#Remember the name of the new filtered data is demo_filter
+demo_filter%>%
+  summarise_all(~sum(is.na(.)))
+```
+We can see that all of the missing values have been removed.
+
+***
+
+Now we need to look for any unusual values within the data. As we mentioned earlier the dob variable is a character. We will first change this to a date variable.
+
+```{r}
+#The new filtered data is demo_filter
+demo_date<-demo_filter%>%
+  mutate(dob=as.Date(dob,format("%d/%m/%Y")))%>%
+  view()
+```
+Now I will find the youngest and oldest person in the demo_date.
+
+```{r}
+#Youngest person
+demo_date%>%
+  summarise(min(dob))
+```
+```{r}
+#Oldest person
+demo_date%>%
+  summarise(max(dob))
+```
+Now unless this person has traveled back in time, you can see there is an error with this date of birth. 
+
+This row will need to be removed from demo_date.
+
+```{r}
+# Filtered for dob before today's date
+demo_date_filter<-demo_date%>%
+  filter(dob<"2021-12-11")%>%
+  view()
+```
+Our filtered data is now ready to be saved as a csv file
+
+```{r}
+write_csv(demo_date_filter,"2021-12-11_PU5050_Demo_Filtered.csv")
+
+```
+
+***
+We are now going to look at the ImagingWaitTimes data.
+
+```{r}
+#Let's use the glimpse function that we used to inspect the demographics data
+glimpse(ImagingWaitTimes)
+```
+We can see there are 5 columns, with variables, chi, month, DiagnosticTestType, DiagnosticTestDescription and WaitingDays.
+
+```{r}
+# The summary function will find the minimum, 1st Quartile, median, mean, 3rd quartile and maximum value for each varible.
+summary(ImagingWaitTimes)
+```
+This function will provide more insight to numeric variables, but it shows you another way that you can quickly get a feel for the data in your dataset. We are particulary interested in the variable WaitingDays. You can see that the minimum number of days is -50. This is obviously an error and will need to be removed. Notice the maximum value is 3267890. We would hope people are not having to wait 8953.1 years for an imaging appointment! This will aslo have to be removed.
+
+Let's filter the data so that the waiting days is not less than zero and not greater than 365 days. Then use the summary function to look at the new maximum and minimum values.
+
+```{r}
+ImagWaitTimesFilter<-ImagingWaitTimes%>%
+  filter(WaitingDays>0 & WaitingDays<100)%>%
+  view()
+  
+```
+We can see the minimum waiting time is 24 days and the maximum is 63 days. This seems more sensible. Now lets look for missing values.
+
+```{r}
+ImagWaitTimesFilter%>%
+  summarise_all(~sum(is.na(.)))%>%
+   view()
+
+```
+
+```{r}
+WaitTime_Tidy<-ImagWaitTimesFilter%>%
+  na.omit()%>%
+  view()
+```
+
+
+
+```{r}
+WaitTime_Tidy%>%
+summarise_all(~sum(is.na(.)))
+``` 
+***
+The WaitTime_Tidy data has now been filtered for unusual values and the rows with missing values has been removed. We are now ready to save the sorted data.
+
+```{r}
+write_csv(WaitTime_Tidy,"2021-12-12_PU5050_WaitTime_Tidy.csv")
+```
+***
+We are now read to join the data sets. There are many ways to join datasets. You have to have a good understanding of the data and how you want it to join. In our scenario we want all of the waiting time details matched with the corresponding chi number from the demo_date_filter data.
+
+```{r}
+join_demo_wait <- inner_join(WaitTime_Tidy,demo_date_filter, by = "chi")%>%
+view()
+# There are still two NA values in ImagWaitTimesFilter                          
+```
+
+```{r}
+# Check the NA values again once the issue has been fixed!!!
+join_demo_wait%>%
+  summarise_all(~sum(is.na(.)))
+```
+
+
+***
+## 4. Data Visualisation
+
+We are now ready to answer the question: What is the average number of Waiting Days, in each Scottish city, in October 2021?
+
+The first thing to do is to decide what data it is we need to answer the question. We need the month, DiagnosticTestDescription, WaitingDays and City.
+
+Instead of manipulating one part of the data at a time we will now make more use of the pipe operator and have multiple lines of code in one code chunk. Before we do this I will explain each of the function that we will use in the analysis.
+
+* select - 
+* filter - 
+* group_by - 
+* mutate - 
+* unique - 
+* ggplot - 
+
+```{r}
+#still got to remove the missing values
+join_demo_wait%>%
+  select(month,DiagnosticTestDescription,WaitingDays,city)%>%
+  filter(DiagnosticTestDescription=="Computer Tomography")%>%
+  filter(month=="October")%>%
+  group_by(city)%>%
+    mutate(mean=mean(WaitingDays))%>%
+  select(city,mean)%>%
+unique()%>%
+ggplot()+
+geom_col(aes(city,mean))
+  
+```
+
+
+```{r}
+join_demo_wait%>%
+  select(month,DiagnosticTestDescription,WaitingDays,city)%>%
+  filter(DiagnosticTestDescription=="Computer Tomography")%>%
+  filter(month=="October")%>%
+  group_by(city)%>%
+    mutate(mean=mean(WaitingDays))%>%
+  select(city,mean)%>%
+unique()%>%
+ 
+ggplot(aes(fct_reorder(city,mean),mean))+
+geom_col(fill="coral")+
+   labs(x="City",y="Average Number of Days", title = "Average number of waiting days for a CT scan in Scottish Cities")+
+  coord_cartesian(ylim=c(25,55))+
+  theme_bw()
 ```
 
 
 
 ***
-
-## 4. Data Visualisation
+1. Data
+2. Facets
+3. Mapping
+4. Scales
+5. Coords
+6. Geoms
+7. Stats  
+Themes
 
 ***
 
 ## 5. Summary and Reflection
+
+What has been your experience using R for reproducible data analysis? 
+
+I found it challenging at first to understand the very basic concepts, such as, reading in data or how the file structures worked. This lack of understanding limited the reproducibility of my work. I kept revising the basics and gradually I began to improve my R programming skills. I realised very quickly I had to really think ahead about what it was I was trying to achieve. I had to ask myself constant questions; 
+ 
+* How is this dataset formatted?
+* What functions can I use?
+* Is this the expected outcome and if not, why?
+
+The constant reflection is not enough will to improve the reproducibility, but all of the reflection must be documented for others to follow. This has also been a large challenge for me. The organisation of file structures and logically documenting my work is something I will have to practice. 
+
+
+
+
+  + Reading lots of theory - really need practice
+* Please reflect on any problems or issues you encountered, for example whilst creating and merging datasets, or using the R language.
+  + Over thinking the basics
+  + Not focusing on what I expect to happen
+  + Not having a logical plan
+  + Had to slow down
+  + Couldn't visualise how everything connected ie branches
+  + RNotebook
 
 ***
