@@ -1,0 +1,5 @@
+Variable Name	Data File Variable Name	Data Type	Measurement Unit 	Allowed Values	Description	Data Supplier
+Community Health Index Number	chi	numeric	Not Applicable	10 digits from 0-9	The first number cannot be a zero.	Student - PU5050 Assessment
+Date of birth	dob	character	dd/mm/yyyy	1-31/1-12/1920-2021	Participants date of birth	Student - PU5050 Assessment
+Sex	sec	character	Not Applicable	1 = male 2 = female	Participants gender	Student - PU5050 Assessment
+City	city	character	Not Applicable	"Dundee, Aberdeen, Edinburgh, Glasgow, Inverness"	Cities in Scotland	Student - PU5050 Assessment

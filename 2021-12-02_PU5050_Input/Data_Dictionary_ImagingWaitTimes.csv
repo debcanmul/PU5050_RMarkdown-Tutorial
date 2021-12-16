@@ -1,0 +1,6 @@
+Variable Name,Data File Variable Name,Data Type,Measurement Unit ,Allowed Values,Description,Data Supplier,Comment
+Community Health Index Number,chi,numeric,Not Applicable,10 digits from 0-9,The first number cannot be a zero.,Student - PU5050 Assessment,
+Month,month,character,Not Applicable,"August, September, October",Month in the year 2021,Student - PU5050 Assessment,
+Diagnostic Test Type,DiagnosticTestType,character,Not Applicable,Imaging,Type of medical investigation,Student - PU5050 Assessment,I wanted to create a more complicated dataset and this variable would have had other types of medical investigations
+Diagnnostic Test Description,DiagnosticTestDescription,character,Not Applicable,"Barium Studies, Computer Tomography, Magnetic Resonance Imaging, Non-obstetric Ultrasound",Type of Imaging,Student - PU5050 Assessment,
+Waiting Days,WaitingDays,numeric,Days,0 - 365,Number of Waiting days for a medical investigation,Student - PU5050 Assessment,
