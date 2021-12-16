@@ -10,7 +10,9 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
+```{r, global_options, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, tidy.opts=list(width.cutoff=80), tidy=TRUE) 
+```
 *** 
 
 ## 1. Introduction
@@ -254,19 +256,17 @@ The package **tidyverse** is a collection of packages that are very useful for d
 
 ### 3.2 Read the packages into R
 
-To read packages into R you use the library function, as shown below:
+We will read in the tidyverse package that has been installed. The library 
+function reads in the package. The message from this code chunk has been shown
+below so you can see which packages have been loaded.
 
 ```{r 3.1 Read in the tidyverse package, echo=TRUE, message=TRUE, warning=TRUE}
-# We will read in the tidyverse package that has been installed. The library function reads in the package. The message from this code chunk has been shown below so you can see which packages have been loaded.
-
 library(tidyverse)
 ```
 
 The here function is used to create simple file referencing in projects. It sets the top level directory (folder) as the main reference point. Then any files are located from this top level. This is instead of having a very large file path consisting of personal directories.
 
 ```{r 3.1 Read in the here package, message=FALSE, warning=FALSE}
-# This function will make file referencing more reproducible.
-
 library(here)
 ```
 
@@ -277,14 +277,16 @@ To be able to read in a dataset we need to assign it to an **object**. An object
 
 R-Software is also case sensitive, so if you name an object with all lower case letters, R will only recognise the name in this form.
 
+We have named an object demographics. The used the read_csv function to 
+read in the 2021-12-02_PU5050_Demographics.csv file. We used the here 
+function so that the file directory is located in relation to the top directory.
+
 
 ```{r 3.1 Read in the data sets, message=FALSE, warning=FALSE}
-# We have named an object demographics. The used the read_csv function to read in the 2021-12-02_PU5050_Demographics.csv file. We used the here function so that the file directory is located in relation to the top directory.
 
 demographics<-read_csv(here("2021-12-02_PU5050_Input/2021-12-02_PU5050_Demographics.csv"))
 
-# We use a similar process, but this time we name an object called ImagingWaitTimes to be assigned with the data in the file 2021-12-02_PU5050_ImagingWaitTimes.csv.
-
+# Now read in the ImagingWaitTimes
 ImagingWaitTimes<-read_csv(here("2021-12-02_PU5050_Input/2021-12-02_PU5050_ImagingWaitTimes.csv"))
 ```
 
@@ -292,69 +294,96 @@ ImagingWaitTimes<-read_csv(here("2021-12-02_PU5050_Input/2021-12-02_PU5050_Imagi
 
 Now that we have the data loaded into R and visible in the environment pane, using the object names demographics and ImagingWaitTimes, we can start to inspect the data. Let's look at demographics first...
 
-```{r 3.4.1 Glimpse}
-# We will use a function called glimpse to look at the variable names within the data set
+We will use a function called glimpse to look at the variable names within 
+the data set.
 
+```{r 3.4.1 Glimpse}
 glimpse(demographics)
 ```
 
 We can see that the data has 4 columns: chi, dob, sex and city. Each column has a single variable, each row is for one observation and each cell has one value. Our data is therefore tidy data.
 
-Explain double/character
-
-```{r}
-class("demographics")
-```
-
+Variables come in difference types, the variable chi is a numeric variable. It's classed as a double <dbl>, which really just means it has lots of accuracy. The other three variables are classed as characters <chr>, which is a categorical type of variable. Note however the dob variable is really a date. We will talk about this later in the tutorial.
 
 ***
 
-Another function to look at the data 
+There are many functions in R that can be used to do similar tasks. Another function to look at the data is the function, head.
 
 ```{r 3.4.2 Head}
 head(demographics)
 ```
 Again we can see there are 4 groups and the types of data.
 
-Now that we have an understanding of the variable names and type of variables we need to look in more detail for missing values, NA, and any unusual data values. 
+Notice however there is the word tibble on the top left of the output. If you look back in section 3.2 tibble was a package loaded within the tidyverse package. A tibble is a data frame but a more modern version. 
 
-I'm going to show you first of all how to find the number of missing values in a single column. 
+Now that we have an understanding of the variable names and the type of variables, we need to look for missing values, NA, and any unusual data values. 
 
-```{r}
+I'm going to show you first of all how to find the number of missing values in a single column. Let's introduce two functions:
+
+
+* **filter** - you can choose to include or remove data with specific criteria. In this case we want to find which cells have missing values, NA.
+
+* **summarise** - you use the function to summarise any variable in the table. This might be the mean, standard deviation or simply to count how many values within that variable.
+
+For each of the functions you can type in a code chunk the name of the function starting with ? and run the code chunk. In the bottom right pane in RStudio you will see additional information about the function.
+
+I also want to introduce the pipe operator, %>%. It looks more complicated than it is, it just means "and then". I will show you in the code below. If you like shortcuts the shortcut for the pipe operator is **CTRL** + **SHIFT** + **M**
+
+```{r 3.4.3 Find missing values in demogrphics in the dob variable}
+# We will first look at the demographics dataset....and then (using the pipe operator)
 demographics%>%
+  
+# We will then filter to find the missing values in the dob variable....and then (using the pipe operator)
   filter(is.na(dob))%>%
+  
+# The summarise function will count how many missing values in each column (variable).
+  
 summarise(n())
 ```
 This shows that within the column dob there are 2 missing values. We want to remove these
 and save the results to a new object. Let's call the filtered data filtered_dob. 
 
-```{r}
+```{r 3.4.4 Remove missing values from dob and assign to filtered_dob}
+# The changes to demographics will be assigned to a new object called filtered_dob
 filtered_dob<-demographics%>%
+
+# Note the exclamation mark in the code this time. It means is not a missing value.
   filter(!is.na(dob))%>%
+  
+# The view function will open the object filtered_dob, the missing values in dob will have been removed.
   view()
 ```
-If we now check how many missing values there are in the dob column in filtered_dob.
+A better way of doing this, especially if you are working with large datasets is to use the summarise function again.
 
-```{r}
+```{r 3.4.5 Check the missing datasets have been removed, echo=TRUE}
 filtered_dob%>%
   filter(is.na(dob))%>%
   summarise(n())
 ```
 We can see now that the missing values have been removed within the new filtered data. Now if we were to continue with this method we would have to work our way along one column at a time. We would check for the number of missing values, save the new filtered data to a new object, remove the missing values and finally check the values have been removed. However, there is a way we can check all the columns at the same time.
-```{r}
+```{r 3.4.6 Checking all the columns for missing data, echo=TRUE}
+# We are going to use the demographics dataset again.
+
 demographics%>%
+  
+# This is a slightly different version of the function summarise, this time it summarises all the columns.
+  
   summarise_all(~sum(is.na(.)))
 ```
 We have looked at the original demographics file and we can see there are 2 missing values in the columns dob, sex and city. Let's remove them and call the new object demo_filter
 
-```{r}
+```{r 3.4.7 remove all the missing values in the demographics dataset}
+#We have a new object called demo_filter
 demo_filter<-demographics%>%
+
+# We use the function na.omit to remove all the missing values.
   na.omit()%>%
+# We can view the dataset demo_filter
 view()
 ```
 Let's check that all the missing values have been removed.
-```{r}
-#Remember the name of the new filtered data is demo_filter
+```{r 3.4.8 check all the missing values have been removed, echo=TRUE}
+
 demo_filter%>%
   summarise_all(~sum(is.na(.)))
 ```
@@ -364,37 +393,59 @@ We can see that all of the missing values have been removed.
 
 Now we need to look for any unusual values within the data. As we mentioned earlier the dob variable is a character. We will first change this to a date variable.
 
-```{r}
-#The new filtered data is demo_filter
+* **mutate** - will create a new column with values created from variable/s within the original dataset. In this example we mutate the dob variable to be changed to a date.
+
+```{r 3.4.9 Change dob to a date variable}
+#The new object name is demo_date, using the demo_filter dataset
 demo_date<-demo_filter%>%
+  
+# The dob variable is changed from a character to a date in the format day, month, year.
   mutate(dob=as.Date(dob,format("%d/%m/%Y")))%>%
-  view()
+  
+view()
 ```
+
+```{r echo=TRUE}
+glimpse(demo_date)
+```
+
+
+
+
 Now I will find the youngest and oldest person in the demo_date.
 
-```{r}
+```{r 3.4.10 Find the youngest person, echo=TRUE}
 #Youngest person
 demo_date%>%
+
+#Using the function min() (minimum)
   summarise(min(dob))
 ```
-```{r}
+```{r 3.4.11 Find the oldest person}
 #Oldest person
 demo_date%>%
+
+#Using the function max() (maximum)
   summarise(max(dob))
 ```
-Now unless this person has traveled back in time, you can see there is an error with this date of birth. 
+Now unless the person with the maximum date of birth has traveled back in time, you can see there is an error with this date of birth. 
 
 This row will need to be removed from demo_date.
 
-```{r}
+```{r 3.4.12 Remove any dates beyond 2021-12-11}
 # Filtered for dob before today's date
 demo_date_filter<-demo_date%>%
+
+#The filter is using to find dates before 2021-12-11
   filter(dob<"2021-12-11")%>%
+  
   view()
 ```
 Our filtered data is now ready to be saved as a csv file
 
-```{r}
+```{r 3.3.13 demo_date_filter saved as a csv file}
+
+# The write_csv function is used to save the demo_date_filter dataset as a csv file
 write_csv(demo_date_filter,"2021-12-02_PU5050_Output/2021-12-11_PU5050_Demo_Filtered.csv")
 
 ```
@@ -402,73 +453,108 @@ write_csv(demo_date_filter,"2021-12-02_PU5050_Output/2021-12-11_PU5050_Demo_Filt
 ***
 We are now going to look at the ImagingWaitTimes data.
 
-```{r}
+```{r 3.3.14 Glimpse ImagingWaitTimes, echo=TRUE}
 #Let's use the glimpse function that we used to inspect the demographics data
 glimpse(ImagingWaitTimes)
 ```
 We can see there are 5 columns, with variables, chi, month, DiagnosticTestType, DiagnosticTestDescription and WaitingDays.
 
-```{r}
-# The summary function will find the minimum, 1st Quartile, median, mean, 3rd quartile and maximum value for each varible.
+
+The summary function will find the minimum, 1st Quartile, median, mean, 3rd quartile and maximum value for each varible.
+
+```{r 3.3.15 Summary of all the variables in WaitingDays, echo=TRUE}
 summary(ImagingWaitTimes)
 ```
-This function will provide more insight to numeric variables, but it shows you another way that you can quickly get a feel for the data in your dataset. We are particulary interested in the variable WaitingDays. You can see that the minimum number of days is -50. This is obviously an error and will need to be removed. Notice the maximum value is 3267890. We would hope people are not having to wait 8953.1 years for an imaging appointment! This will aslo have to be removed.
+This function will provide more insight to numeric variables than character variables, but it shows you another way that you can quickly get a feel for the data in your dataset. We are particularly interested in the variable WaitingDays. You can see that the minimum number of days is -50. This is obviously an error and will need to be removed. Notice the maximum value is 3267890. We would hope people are not having to wait 8953.1 years for an imaging appointment! This will also have to be removed.
 
 Let's filter the data so that the waiting days is not less than zero and not greater than 365 days. Then use the summary function to look at the new maximum and minimum values.
 
-```{r}
+```{r 3.3.16 Filiter for WaitingDays greater than zero and less than 365}
 ImagWaitTimesFilter<-ImagingWaitTimes%>%
-  filter(WaitingDays>0 & WaitingDays<100)%>%
+
+# An and sign, &, can be used to combine criteria
+  filter(WaitingDays>0 & WaitingDays<365)%>%
+
   view()
   
 ```
+
+Let's check the maximum and minimum values for WaitingDays
+
+```{r 3.3.17 Check the maximum and minimum calues of WaitingDays, echo=TRUE}
+summary(ImagWaitTimesFilter)
+```
+
+
 We can see the minimum waiting time is 24 days and the maximum is 63 days. This seems more sensible. Now lets look for missing values.
 
-```{r}
+```{r 3.3.18 Remove the missing values from ImagWaitTmesFilter, echo=TRUE}
 ImagWaitTimesFilter%>%
   summarise_all(~sum(is.na(.)))%>%
    view()
 
 ```
-
-```{r}
+There are 2 missing values in month and 2 in DiagnosticTestDescription. Let's remove these from the dataset.
+```{r 3.3.19 remove the missing values from the ImagWaitTimeFilter dataset}
+# We will give the new object the name WaitTime_Tidy
 WaitTime_Tidy<-ImagWaitTimesFilter%>%
+  
   na.omit()%>%
   view()
 ```
+We can check that the missing values have been successfully removed.
 
 
-
-```{r}
+```{r 3.3.20 Check all the missing values have been removed, echo=TRUE}
 WaitTime_Tidy%>%
 summarise_all(~sum(is.na(.)))
 ``` 
 ***
-The WaitTime_Tidy data has now been filtered for unusual values and the rows with missing values has been removed. We are now ready to save the sorted data.
+The WaitTime_Tidy data has now been filtered for unusual values and the rows with missing values have been removed. We are now ready to save the sorted data.
 
-```{r}
+```{r 3.3.21 save the object WaitTime_Tidy as a csv file}
 write_csv(WaitTime_Tidy,"2021-12-02_PU5050_Output/2021-12-12_PU5050_WaitTime_Tidy.csv")
 ```
 ***
-We are now read to join the data sets. There are many ways to join datasets. You have to have a good understanding of the data and how you want it to join. In our scenario we want all of the waiting time details matched with the corresponding chi number from the demo_date_filter data.
+We are now ready to join the data sets. There are many ways to join datasets. You have to have a good understanding of the data and how you want it to join. In our scenario we want all of the waiting time details matched with the corresponding chi number from the demo_date_filter data.
 
-```{r}
+```{r 3.3.22 use the inner_join function}
+# The inner_join function will combine all the data in WaitTimeTidy with the relevant demo_date_filter observations with the same chi value.
 join_demo_wait <- inner_join(WaitTime_Tidy,demo_date_filter, by = "chi")%>%
+  
 view()
-# There are still two NA values in ImagWaitTimesFilter                          
+                         
 ```
 
-```{r}
-# Check the NA values again once the issue has been fixed!!!
-join_demo_wait%>%
-  summarise_all(~sum(is.na(.)))
+We will now check that the data has combined correctly.
+
+```{r 3.3.23 inspect the join_demo_wait dataset, echo=TRUE}
+glimpse(join_demo_wait)
 ```
+We have 8 variables and they have been combined by the chi variable.
 
 
 ***
 ## 4. Data Visualisation
 
-We are now ready to answer the question: What is the average number of Waiting Days, in each Scottish city, in October 2021?
+We are now ready to answer the question: What is the average number of waiting days, in each Scottish city, in October 2021?
+
+We will create a graph to help answer the question. I am going to introduce you to the main terminology used when creating a graph or chart in ggplot2. 
+
+1. **Data** - to be able to plot a graph or chart you need data. Depending on the type of data you have and the question you want to answer will determine the type of graph or chart that you will choose to create. You will do this by choosing the variables to be visualised.
+
+2. **Mapping** - mapping refers to the variables that you are going to use to plot on your graph or chart. In my example, the cities will be the categorical variable on the x-axis and the average number of waiting days a numeric continuous variable will be displayed on the y-axis. 
+
+3. **Geoms** - Geoms are geometric objects, such as a point, rectangle, line, connected line or an area. These objects are mapped on the blank ggplot to represent the data. Depending on the type of data you want to visualise will determine with geom you use. In the data I want to visualise I have a numeric continuous variable (average number of days) and a categorical variable (city). Therefore I have chosen a bar graph to display the data, so the geom is a rectangle.
+
+4. **Themes** - are not a main parameter, but the overall style of the graph can be changed using different themes available within the package ggplot2. 
+
+Below is the code to produce a simple bar chart. I start off with my blank piece of paper, ggplot().
+
+**ggplot()+**  
+**geom_col(aes(city,mean))**
+
+I chose the geom to be a rectangle in the form of a column bar chart, geom_col(). I then set the mapping using the **aesthetics function aes()** to choose the variables that I want mapped on the chart using the rectangles. The x-variable will be the city and the y-variable the mean. The mean variable will be created in the code below.
 
 The first thing to do is to decide what data it is we need to answer the question. We need the variables month, DiagnosticTestDescription, WaitingDays and City.
 
@@ -476,35 +562,50 @@ Instead of manipulating one part of the data at a time we will now make more use
 
 * **select** - this function allows me to select which variables (columns) of data from a dataset that I want to analyse. If you add a minus sign in front of the variable it will keep all the variaables in the original dataset and only remove this variable.
 
-* **filter** - you can choose to include or remove data with specific criteria. In this case we don't want any negative waiting days or incredibly large number of waiting days.
-
 * **group_by** - if you have a variable with different values, in this scenario the city variable has different variables. I can group by the different cities.
 
-* **mutate** - will create a new column with values created from variable/s within the original dataset. In this example the variable mean was created finding the average number of waiting days per city.
+* **unique** - selects only the unique rows within a dataset.
 
-* **unique** - selects only the unique rows within a dataset
+* **ggplot** - gives us a blank canvas, I like to think of this as finding a blank piece of paper where we can draw our graph or chart.
 
-* **ggplot** - gives us a blank canvas, I like to think of this as finding a blank piece of paper where we can draw our graph or chart
+Remember for each of the functions you can type in a code chunk the name of the function starting with ? and run the code chunk. 
 
-Remember for each of the functions you can type in a code chunk the name of the function starting with ? and run the code chunk. In the bottom right pane in RStudio you will see additional information about the function.
-
-```{r}
-#still got to remove the missing values
+```{r 4.1 Answer the question and plot a basic column chart}
+# We will use the join_demo_wait dataset to answer the question.
 join_demo_wait%>%
+  
+# The variables month, DiagnosticTestDescriptions, WaitingDays and city have been chosen.
   select(month,DiagnosticTestDescription,WaitingDays,city)%>%
+
+# The DiagnsiticsTestDescription variable is to be filtered for Computer Tomography.
   filter(DiagnosticTestDescription=="Computer Tomography")%>%
+
+# Now filter for only the month of October.
   filter(month=="October")%>%
+
+# Group the data by each of the 5 cities.
   group_by(city)%>%
+  
+# Create a new column calcuating the mean number of waiting days for each city.
     mutate(mean=mean(WaitingDays))%>%
+
+# Only select the columns city and mean.
   select(city,mean)%>%
+
+# I only want the unique values, so I only need 5 rows of data, one for for each city.
 unique()%>%
+
+# Tell Rmarkdown you want to plot a graph.
 ggplot()+
+
+# The graph to be plotted is a column bar chart using the variable city as the x-axis 
+# and the mean number of days as the y-axis.
 geom_col(aes(city,mean))
   
 ```
+Instead of just the basic graph we will make some improvements.
 
-
-```{r}
+```{r 4.2 Add aesthetics to the basic graph}
 join_demo_wait%>%
   select(month,DiagnosticTestDescription,WaitingDays,city)%>%
   filter(DiagnosticTestDescription=="Computer Tomography")%>%
@@ -517,7 +618,7 @@ unique()%>%
   # I reordered the data in ascending order so I could see at a glance the increase in average number of waiting days per city. 
 ggplot(aes(fct_reorder(city,mean),mean))+
   
-  # I gave the graph some colour to make it more visualy pleasing. Initially I just used coral as the colour, but sunglasses would have been required.
+  # I gave the graph some colour to make it more visually pleasing. Initially, I just used coral as the colour, but sunglasses would have been required.
   geom_col(fill="light coral")+
   
   # I then fixed the names of the x and y axis to include capital letters and to provide more information on the variables related by the axes. A title was also added to the graph to explain the data visualised in the 
@@ -531,35 +632,29 @@ ggplot(aes(fct_reorder(city,mean),mean))+
 ```
 
 
+This section of the code shows the actual values of mean waiting days visualised on the chart.
+```{r echo=TRUE, message=TRUE}
+join_demo_wait%>%
+  select(month,DiagnosticTestDescription,WaitingDays,city)%>%
+  filter(DiagnosticTestDescription=="Computer Tomography")%>%
+  filter(month=="October")%>%
+  group_by(city)%>%
+    mutate(mean=mean(WaitingDays))%>%
+  select(city,mean)%>%
+unique()
+```
+
+
 
 ***
-I am going to introduce you to the main terminology used when creating a graph or chart in ggplot2. 
+Following on from the list of terminology for graphs you may be interested in some other aspects of graphs. If you would rather come back to this, move on to section 5.
 
-1. **Data** - to be able to plot a graph or chart you need data. Depending on the type of data you have and the question you want to answer will determine the type of graph or chart that you will choose to create. You will do this by choosing the variables to be visualised.
-
-2. **Mapping** - mapping refers to the variables that you are going to use to plot on your graph or chart. In my example, the cities will be the categorical variable on the x-axis and the average number of waiting days a numeric continuous variable will be displayed on the y-axis. 
-
-3. **Geoms** - Geoms are geometric objects, such as a point, rectangle, line, connected line or an area. These objects are mapped on the blank ggplot to represent the data. Depending on the type of data you want to visualise will determine with geom you use. In the data I want to visualise I have a numeric continuous variable (average number of days) and a categorical variable (city). Therefore I have chosen a bar graph to display the data, so the geom is a rectangle.
-
-Below is the code to produce a simple bar chart. I start off with my blank piece of paper, ggplot().
-
-**ggplot()+**  
-**geom_col(aes(city,mean))**
-
-I chose the geom to be a rectangle in the form of a column bar chart, geom_col(). I then set the mapping using the **aesthetics function aes()** to choose the variables that I want mapped on the chart using the rectangles. The x-variable will be the city and the y-variable the mean.
-
-
-
-
-4. **Themes** - the overall style of the graph can be changed using different themes available within the package ggplot2. 
-Following on from the list above, here is some other graphing terminology you may come across.
 
 5. **Facets** - if you have a graph or chart that contains different values from a variable you may wish to view these separately. If my question had asked, What was the  average number of waiting days for CT scans in each Scottish city in Oct 2021 for each gender. I could then use the facets function to create 2 graphs, one for male and female. I would need to make sure that I had the sex variable in the dataset that I was using to create the graph. 
 
 6. **Scales** - this is when you want to change the aesthetics using a variable in the dataset.
 
 7. **Stats** - additional analysis can be added to your graphs, such as a line of best fit.
-
 
 You can find more information on these graphing terms mentioned, [here.](https://intro2r.com/the-start-of-the-end.html)
 
@@ -589,7 +684,6 @@ The constant reflection alone is not enough to improve reproducibility, but all 
 I enjoy working on problems and learning new skills and I'm sure I'll encounter many more as I continue to develop my RMarkdown and reproducibility skills.   
   
   
- 
 
 ***
 
@@ -609,4 +703,6 @@ References
  	 
 6.	Tidy data for efficiency, reproducibility, and collaboration [Internet]. Openscapes.org. [cited 2021 Dec 14]. Available from: https://www.openscapes.org/blog/2020/10/12/tidy-data/
  	 
+
+
 
