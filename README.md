@@ -5,7 +5,12 @@ ReadMe File modified from Template https://cornell.app.box.com/v/ReadmeTemplate
 GENERAL INFORMATION
 
 1. R-Tutorial
-ADD SCENARIO
+This class assessment is to create two fake data sets and then answer a question by tidying, manipulating and plotting the data.
+The question created is - What is the average number of waiting days for Computer Tomography scans for each Scottish City in October 2021?
+
+There are 2 datasets, Demographics and ImagingWaitTimes. 
+The variable months in the ImagingWaitTimes; August, September and October are all from the year 2021. 
+This question is to be answered by using the knowledge gained in unit PU5050 Open and Reproducible Data Science at the University of Aberdeen.
 
 2. Author Information
 	Humpty Dumpty 
@@ -71,15 +76,28 @@ Tidyverse
 here
 
 
-DATA-SPECIFIC INFORMATION FOR: [FILENAME]
-<repeat this section for each dataset, folder or file, as appropriate>
+DATA-SPECIFIC INFORMATION FOR: [Demographics]
 
-1. Number of variables: 
 
-2. Number of cases/rows: 
+1. Number of variables: 4
+
+2. Number of cases/rows: 100
 
 3. Variable List: 
-<list variable name(s), description(s), unit(s)and value labels as appropriate for each>
+See Data_Dictionary_Demographics
+
+4. Missing data codes: 
+  NA
+
+DATA-SPECIFIC INFORMATION FOR: [ImagingWaitTimes]
+
+
+1. Number of variables: 5
+
+2. Number of cases/rows: 100
+
+3. Variable List: 
+See Data_Dictionary_ImagingWaitTimes
 
 4. Missing data codes: 
   NA
@@ -91,3 +109,5 @@ CONTACT DETAILS
 Humpty.Dumpty@abdn.ac.uk
 
 SUGGESTIONS FOR FURTHER DEVELOPMENT
+ImagingWaitTimes - I would have added actual dates for when the medical investigations were first requested and when the appointment was completed. Then I would have used R to calculate the number of days between the dates.
+ImagingWaitTimes - I wanted to add more types of medical investigation when creating the fake data.
