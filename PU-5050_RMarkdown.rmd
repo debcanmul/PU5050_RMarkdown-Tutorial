@@ -37,7 +37,7 @@ The internet uses a language called HTML
 This probably took some time to fix if the graphs were created in Excel, the analysis in statistical software and the written text in Word. In RMarkdown you can create everything in the RMarkdown file. If you change the data and then run the RMarkdown file all the changes are done for you. 
 
 **So how does this help reproducibility?**     
-In a final Word document, publication or report where only the results are included, there is no visibility of the data, code or method. In order for research to be reproducible, to be able to check the accuracy and run it for our-self, we need to be able to understand how the result was formulated. In the RMarkdown file the names of the data sets, the manipulation of the data, the code and how the results are produced are all documented in the RMarkdown file. If the data sets are also shared on a shared repository, such as GitHub, you would even be able to create the entire report yourself by simply running the Rmarkdown file. 
+In a final Word document, publication or report where only the results are included, there is no visibility of the data, code or method. In order for research to be reproducible, to be able to check the accuracy and run it for our-self, we need to be able to understand how the result was formulated. In the RMarkdown file the names of the data sets, the manipulation of the data, the code and how the results are produced are all documented in the RMarkdown file. If the data sets are also shared on a shared repository, such as GitHub, you would even be able to create the entire report yourself by simply running the Rmarkdown file. RMarkdown also doesn't change the original data, but uses a copy of the data so the orignal data source can still be shared.
 
 ***
 
@@ -56,7 +56,9 @@ fig.cap=paste("Figure 1")
 
 
 ```
-We will work through each of these topics in turn:
+***
+
+We will work through each of these RMarkdown topics in turn:
 
 * 2.1 RMarkdown File Header
 * 2.2 Text Chunks
@@ -74,7 +76,7 @@ We will work through each of these topics in turn:
 
 A basic RMarkdown header is created by default when you create an RMarkdown file. It consists of the following text:
 
-Change to an image...
+    
 ---
 title: "Section 2"
 author: "Your Name"
@@ -82,21 +84,21 @@ date: "13/12/2021"
 output: html_document
 ---
 
-This header is called a YAML header. YAML stands for "YAML Ain't Markup Language". Yes, the terminology is rather odd. It consists of a title, author, date and output. You can change the default header by simply editing it in RMarkdown. However make sure it is in the same layout, indentation will change the output of the header. On a separate line start and end with ---.
+This header is called a YAML header. YAML stands for "YAML Ain't Markup Language". Yes, the terminology is rather odd. It consists of a title, author, date and output. You can change the default header by simply editing it in RMarkdown. However make sure it is in the same layout, indentation will change the output of the header. Also start and end on a On a separate line with ---.
 
-The YAML header can be changed to change the output of the document. In the basic header it is set to html_document. It can be changed to a pdf_document. We will talk about this in more detail in section 2.5. The font and font size for the entire document can also be changed by editing the YAML header. A contents page and a bibliography are also options.
+The YAML header can be changed to change the output of the document. In the basic header it is set to html_document. It can be changed to a pdf_document. We will talk about this in more detail in section 2.5. The font and font size for the entire document can also be changed by editing the YAML header. A contents page and a bibliography are also possible options.
 
 ### 2.2 Text Chunks
 
-Text chunks are sections where you freely type text. This is anywhere below the YAML header, where you haven't added a code chunk, see section (2.3) for more details on code chunks. You can edit the text by using different syntax commands. We will look at headers and then lists.
+Text chunks are sections where you freely type text. This is anywhere in the RMarkdown file below the YAML header, where you haven't added a code chunk, see section (2.3) for more details on code chunks. You can edit the text by using different syntax commands. We will look at headers and then lists.
 
 ###### 2.2.1 Headers
 
-To create a header in RMarkdown in a text chunk you have to start with a # and then a space and then type the name of the header. The biggest header will start with a single #, ## would create a slightly smaller header and so on.
+To create a header in RMarkdown in a text chunk you have to start with a # and then a space and then type the name of the header. The biggest header will start with a single #, ## would create a slightly smaller header and so on. I used ### for my first header, because if I had used a single # it would have automatically included this header as part of my contents at the start of the report.
 
 \ ### Large Header  
-\ #### Slightly smaller header  
-\ ##### Even smaller header  
+\ ##### Slightly smaller header  
+\ ####### Even smaller header  
 
 The output would be as shown below: 
 
@@ -124,7 +126,7 @@ The output would be as shown below:
 * Glasgow  
 * Inverness  
 
-To create a numbered list you write with numbers in the front of the item in the list. Even if you don't number the items correctly from 1-5. If you number the list in any order RMarkdown will renumber them for you in ascending order starting from the top of the list.
+To create a numbered list you start with numbers in the front of the item in the list. Even if you don't number the items correctly from 1-5, if you number the list in any order RMarkdown will renumber them for you in ascending order starting from the top of the list.
 
 \ 1. Aberdeen  
 \ 8. Dundee  
@@ -149,6 +151,7 @@ To create a sublist in RMarkdown, you need to indent the sublist and use + in fr
   \  + Duthie Park  
   \  + Aberdeen Maritime Museum  
   
+The output would be as shown below:
   
 1. Aberdeen
    + Aberdeen Art Gallery
@@ -157,7 +160,7 @@ To create a sublist in RMarkdown, you need to indent the sublist and use + in fr
 
 ### 2.3 Code Chunks
 
-Code chunks are where you type all the code for your project. You can decide if you want all the code visible in your final report or if you want it hidden. You can also switch off error messages and decide if the output from the code chunk is to appear in your report or if it's just to be used within another part of your code in a different code chunk. You can change the settings for each code chunk using the code chunk cog. 
+Code chunks are where you type all the code for your project. You can decide if you want all the code visible in your final report or if you want it hidden. You can also switch off error messages and decide if the output from the code chunk is to appear in your report or if it's just to be used within another part of your code in a different code chunk. The quickest and easiest way to do this is use the code chunk cog. 
 
 Code chunks start with three back ticks, {r} and end with 3 back ticks ``` on a separate line. You can use the shortcut **CTRL** + **ALT** + **I** to create a code chunk. The + means "and" and not the plus sign on the keyboard. 
 
@@ -180,13 +183,13 @@ You can add comments in code chunks by adding # to the front of the comment. Thi
 
 ### 2.4 Inline Code
 
-You may wish to add a value calculated from your data somewhere within a sentence in your text. In this case code chunks would not be suitable, but you can use inline code. Instead of 3 back ticks you use only 1 before and afer r.
+You may wish to add a value calculated from your data somewhere within a sentence in your text. In this case code chunks would not be suitable, but you can use inline code. Instead of 3 back ticks you use only 1 before and afer r. You can use different syntax within the inline code. In this example I have used + to add 3 people and 7 people who are waiting. I could have used multiply *, divide / or even a result that has been saved to an object. We will talk more about objects in section 
 
 ```{r echo=TRUE}
-#The total number of people waiting in the hospital for appointments are `r 3+7`
+#The total number of people in the waiting room is `r 3+7`
 ```
 
-The total number of people in the waiting room are `r 3+7`.
+The total number of people in the waiting room is `r 3+7`.
 
 ### 2.5 Output File Type Specification
 
@@ -194,7 +197,7 @@ Output file types were mentioned briefly in section 2.1, YAML header. We can cha
 
 ### 2.6 Generation of Output
 
-To create the chosen file type you have to Knit the data, code and text into the final document. If you want to create pdf documents you will have to install a package called tinytex.
+To create the chosen file type you have to Knit the data, code and text into the final document. If you want to create pdf documents you will have to install a package called TinyTex.
 
 
 
@@ -203,11 +206,11 @@ To create the chosen file type you have to Knit the data, code and text into the
 ## 3. Data Preparation
 
 **What is a fake dataset?**  
-The data sets that were created for this tutorial are called fake data sets. They were created using code to generate random data specifically for this tutorial. If the data isn't real, why are fake data sets useful? The type of data for our scenario is health data. Health data cannot be openly shared due to confidentiality. If you were asked to find the answer to a similar question but with real data, you would have gained the knowledge and experience by using the fake data. Not only that, if I had shared the method with you, the code in the RMarkdown file, then very quickly with little manipulation you would have an answer. 
+The data sets that were created for this tutorial are called fake datasets. They were created using code which generated random data specifically for this tutorial. If the data isn't real, why are fake datasets useful? The type of data for our scenario is health data. Health data cannot be openly shared due to confidentiality. If you were asked to find the answer to a similar question but with real data, you would have gained the knowledge and experience by practicing with the fake data. Not only that, if I had shared the method with you, the code in the RMarkdown file, then very quickly with little manipulation you would have an answer.
 
-You may also look at my code and think of improvements or find errors. This could all be fixed and edited before the real data was analysed. However, there are some limitations to fake data. They can't be used for analysis that requires a specific statistical test. The data was just randomly generated. There is a possible solution, synthetic datasets.
+You may also look at my code and think of improvements or find errors. This could all be fixed and edited before the real data was analysed. However, there are some limitations to fake data. They can't be used for analysis that requires a specific statistical test. The data was just randomly generated. There is a possible solution however, synthetic datasets.
 
-**Synthetic data sets** are a special type of fake data set that are created to keep the statistical properties. Synthetic datasets can be time consuming to create. If you are also doing research on a rare disease in a small population, it is likely the patient could be identified. So great care must be taken, but the benefits of fake data sets and synthetic data sets are essential for the reproducibility of health data.
+**Synthetic data sets** are a special type of fake data set that are created to keep the statistical properties. Synthetic datasets can be time consuming to create. If you are also doing research on a rare disease in a small population, it is likely the patient could still be identified. So great care must be taken, but the benefits of fake datasets and synthetic data sets are essential for the reproducibility of health data.
 
 **What is metadata?**  
 
@@ -215,62 +218,94 @@ Metadata is different forms of documentation that explains the data in detail. I
 
 **Why is good metadata important?**
 
-If I was to give you a large dataset with no headings or any explanation of how the data was created, it would be useless. The better the metadata the more reproducible the overall project can be. The quicker the project can be reproduced and 
-There are different standards for metadata that can be followed depending on which field you work or research. Information on different standards can be found [here.](https://fairsharing.org/standards/) 
+If I was to give you a large dataset with no headings or any explanation of how the data was created, it would be useless. The better the metadata the more reproducible the overall project can be and the quicker the project can be reproduced. 
+There are different standards for metadata that can be followed depending on which field of work or research you are interested in. Information on different standards can be found [here.](https://fairsharing.org/standards/) 
 
 The ReadMe file in this RProject was modified from Cornell, a copy of the template can be found [here.](https://the-turing-way.netlify.app/reproducible-research/rdm/rdm-metadata.html#rr-rdm-metadata)
 
 **What is a tidy dataset?**
 
-A tidy dataset is when there is only one observation per row.
+A dataset is classed as tidy when the following 3 rules are obeyed:
 
+1. **Each variable has it's own column**  
+2. **Each record/observation has it's own row**  
+3. **Each individual cell has a single value**
 
-Before we can start to prepare data we need to complete the follow steps 3.1 - 3.3. 
+**What are the benefits of tidy datasets?**
+
+Tidy datasets allow the use of tools that have been created by other people. The tools are designed to be used with tidy data. This saves time by not having to design your own tools. Reproducibility is also increased because other people working with your data will also have access to the same tools.It will also be easier for other people to understand the structure of your data if it is tidy. This would reduce the amount of time people would need to manipulate the data into a tidy form. You can design a workflow using many of these tools. The benefit of this is if you add some new data in the tidy format you can simply rerun the workflow. 
+
+***
+
+Before we can start to prepare data we need to complete steps 3.1 - 3.3, install the packages, read the packages into R and read in the datasets. 
 
 ### 3.1 Install the packages
-First you want to install the packages you will need to work with the data. I have already installed the packages so for you, you would enter the following code.
+First you want to install the packages you will need to work with the data. I have already installed the packages into R, so for you, you would complete the following.
 
 * Start a new markdown file (2.2.1)  
 * Start a new code chunk (2.2.3)
 
 Then type in the following code.
 
-**install.packages(tidyverse)**  
-**install.packages(here)**
+**install.packages("tidyverse")**  
+**install.packages("here")**
+
+The package **tidyverse** is a collection of packages that are very useful for data science. We will use two of the packages within tidyverse in this tutorial, **dplyr** and **ggplot2**. The first package, dplyr, is used to transform data. The second package, ggplot2, is used to create visual representations of the data such as graphs and charts.
 
 ### 3.2 Read the packages into R
 
-```{r 3.1 Read in the Packages, message=FALSE, warning=FALSE}
-# These are the packages we will use to work with the data.
+To read packages into R you use the library function, as shown below:
+
+```{r 3.1 Read in the tidyverse package, echo=TRUE, message=TRUE, warning=TRUE}
+# We will read in the tidyverse package that has been installed. The library function reads in the package. The message from this code chunk has been shown below so you can see which packages have been loaded.
+
 library(tidyverse)
+```
+
+The here function is used to create simple file referencing in projects. It sets the top level directory (folder) as the main reference point. Then any files are located from this top level. This is instead of having a very large file path consisting of personal directories.
+
+```{r 3.1 Read in the here package, message=FALSE, warning=FALSE}
+# This function will make file referencing more reproducible.
+
 library(here)
 ```
 
 
-
-
 ### 3.3 Read in the data sets
 
-R-Software is case sensitive, so if you name an object with all lower case letters, R will only recognise the name in this form.
+To be able to read in a dataset we need to assign it to an **object**. An object can be many different things such as a single number, a single word or a large dataset. You create your own names for objects but just be careful you don't use a function that already exists, a common object name is data but there is a function called data. Also don't start an object name with reserved characters, numbers or include any spaces within the name. When an object has been created you will the name of the object in the environment pane on the top right of the RStudio window. Also if you use the same object name it will override the data previously assigned. To assign an object we use the assignment operator, <-, a less than sign and then a dash.
 
-Explain objects and assignment operators
+R-Software is also case sensitive, so if you name an object with all lower case letters, R will only recognise the name in this form.
+
 
 ```{r 3.1 Read in the data sets, message=FALSE, warning=FALSE}
+# We have named an object demographics. The used the read_csv function to read in the 2021-12-02_PU5050_Demographics.csv file. We used the here function so that the file directory is located in relation to the top directory.
+
 demographics<-read_csv(here("2021-12-02_PU5050_Input/2021-12-02_PU5050_Demographics.csv"))
+
+# We use a similar process, but this time we name an object called ImagingWaitTimes to be assigned with the data in the file 2021-12-02_PU5050_ImagingWaitTimes.csv.
+
 ImagingWaitTimes<-read_csv(here("2021-12-02_PU5050_Input/2021-12-02_PU5050_ImagingWaitTimes.csv"))
 ```
 
 ### 3.4 Inspect the data
 
-Now that we have the data loaded into R, using the object names demographics and ImagingWaitTimes, we can start to inspect the data. Let's look at demographics first..
+Now that we have the data loaded into R and visible in the environment pane, using the object names demographics and ImagingWaitTimes, we can start to inspect the data. Let's look at demographics first...
 
 ```{r 3.4.1 Glimpse}
 # We will use a function called glimpse to look at the variable names within the data set
+
 glimpse(demographics)
 ```
 
-We can see that the data has 4 columns: chi, dob, sex and city.
+We can see that the data has 4 columns: chi, dob, sex and city. Each column has a single variable, each row is for one observation and each cell has one value. Our data is therefore tidy data.
+
 Explain double/character
+
+```{r}
+class("demographics")
+```
+
 
 ***
 
@@ -559,3 +594,19 @@ I enjoy working on problems and learning new skills and I'm sure I'll encounter 
 ***
 
 ## 6. References
+
+References
+
+1.	Bates C. R markdown tips, tricks, and shortcuts [Internet]. Dataquest.io. 2020 [cited 2021 Dec 13]. Available from: https://www.dataquest.io/blog/r-markdown-tips-tricks-and-shortcuts/
+ 	 
+2.	Foster E. Library guides: How to write a good documentation: Home. 2017 [cited 2021 Dec 13]; Available from: https://guides.lib.berkeley.edu/how-to-write-good-documentation
+ 	 
+3.	FAIRsharing [Internet]. Fairsharing.org. [cited 2021 Dec 13]. Available from: https://fairsharing.org/standards/
+ 	 
+4.	Documentation and metadata — the Turing way [Internet]. Netlify.app. [cited 2021 Dec 13]. Available from: https://the-turing-way.netlify.app/reproducible-research/rdm/rdm-metadata.html
+ 	 
+5.	Europa.eu. [cited 2021 Dec 13]. Available from: https://open-research-europe.ec.europa.eu/for-authors/data-guidelines
+ 	 
+6.	Tidy data for efficiency, reproducibility, and collaboration [Internet]. Openscapes.org. [cited 2021 Dec 14]. Available from: https://www.openscapes.org/blog/2020/10/12/tidy-data/
+ 	 
+
