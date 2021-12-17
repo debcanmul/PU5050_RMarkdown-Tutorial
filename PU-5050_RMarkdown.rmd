@@ -478,7 +478,7 @@ demo_date<-demo_filter%>%
 view()
 ```
 
-```{r 3.4.10 echo=TRUE}
+```{r 3.4.10, echo=TRUE}
 glimpse(demo_date)
 ```
 
@@ -589,7 +589,7 @@ The WaitTime_Tidy data has now been filtered for unusual values and the rows wit
 write_csv(WaitTime_Tidy,"2021-12-02_PU5050_Output/2021-12-12_PU5050_WaitTime_Tidy.csv")
 ```
 ***
-We are now ready to join the data sets. There are many ways to join datasets. You have to have a good understanding of the data and how you want it to join. In our scenario we want all of the waiting time details matched with the corresponding chi number from the demo_date_filter data. To view different types of joins click [here (11).](https://github.com/gadenbuie/tidyexplain#mutating-joins) ) 
+We are now ready to join the data sets. There are many ways to join datasets. You have to have a good understanding of the data and how you want it to join. In our scenario we want all of the waiting time details matched with the corresponding chi number from the demo_date_filter data. To view different types of joins click [here (11).](https://github.com/gadenbuie/tidyexplain#mutating-joins) 
 
 ```{r 3.4.23 use the inner_join function}
 # The inner_join function will combine all the data in WaitTimeTidy with the 
