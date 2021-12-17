@@ -325,13 +325,13 @@ We will read in the tidyverse package that has been installed. The library
 function reads in the package. The message from this code chunk has been shown
 below so you can see which packages have been loaded.
 
-```{r 3.1 Read in the tidyverse package, echo=TRUE, message=TRUE, warning=TRUE}
+```{r 3.2.1 Read in the tidyverse package, echo=TRUE, message=TRUE, warning=TRUE}
 library(tidyverse)
 ```
 
 The here function is used to create simple file referencing in projects. It sets the top level directory (folder) as the main reference point. Then any files are located from this top level. This is instead of having a very large file path consisting of personal directories.
 
-```{r 3.1 Read in the here package, message=FALSE, warning=FALSE}
+```{r 3.2.2 Read in the here package, message=FALSE, warning=FALSE}
 library(here)
 ```
 
@@ -347,7 +347,7 @@ read in the 2021-12-02_PU5050_Demographics.csv file. We used the here
 function so that the file directory is located in relation to the top directory.
 
 
-```{r 3.1 Read in the data sets, message=FALSE, warning=FALSE}
+```{r 3.3.1 Read in the data sets, message=FALSE, warning=FALSE}
 
 demographics<-read_csv(here("2021-12-02_PU5050_Input/2021-12-02_PU5050_Demographics.csv"))
 
@@ -478,7 +478,7 @@ demo_date<-demo_filter%>%
 view()
 ```
 
-```{r echo=TRUE}
+```{r 3.4.10 echo=TRUE}
 glimpse(demo_date)
 ```
 
@@ -487,14 +487,14 @@ The dob variable is now classed as a date.
 
 Now I will find the youngest and oldest person in the demo_date.
 
-```{r 3.4.10 Find the youngest person, echo=TRUE}
+```{r 3.4.11 Find the youngest person, echo=TRUE}
 #Youngest person
 demo_date%>%
 
 #Using the function min() (minimum)
   summarise(min(dob))
 ```
-```{r 3.4.11 Find the oldest person}
+```{r 3.4.12 Find the oldest person}
 #Oldest person
 demo_date%>%
 
@@ -505,7 +505,7 @@ Now unless the person with the maximum date of birth has traveled back in time, 
 
 This row will need to be removed from demo_date.
 
-```{r 3.4.12 Remove any dates beyond 2021-12-11}
+```{r 3.4.13 Remove any dates beyond 2021-12-11}
 # Filtered for dob before today's date
 demo_date_filter<-demo_date%>%
 
@@ -516,7 +516,7 @@ demo_date_filter<-demo_date%>%
 ```
 Our filtered data is now ready to be saved as a csv file
 
-```{r 3.3.13 demo_date_filter saved as a csv file}
+```{r 3.4.14 demo_date_filter saved as a csv file}
 
 # The write_csv function is used to save the demo_date_filter dataset as a csv file
 write_csv(demo_date_filter,"2021-12-02_PU5050_Output/2021-12-11_PU5050_Demo_Filtered.csv")
@@ -526,7 +526,7 @@ write_csv(demo_date_filter,"2021-12-02_PU5050_Output/2021-12-11_PU5050_Demo_Filt
 ***
 We are now going to look at the ImagingWaitTimes data.
 
-```{r 3.3.14 Glimpse ImagingWaitTimes, echo=TRUE}
+```{r 3.4.15 Glimpse ImagingWaitTimes, echo=TRUE}
 #Let's use the glimpse function that we used to inspect the demographics data
 glimpse(ImagingWaitTimes)
 ```
@@ -535,14 +535,14 @@ We can see there are 5 columns, with variables, chi, month, DiagnosticTestType, 
 
 The summary function will find the minimum, 1st Quartile, median, mean, 3rd quartile and maximum value for each varible.
 
-```{r 3.3.15 Summary of all the variables in WaitingDays, echo=TRUE}
+```{r 3.4.16 Summary of all the variables in WaitingDays, echo=TRUE}
 summary(ImagingWaitTimes)
 ```
 This function will provide more insight to numeric variables than character variables, but it shows you another way that you can quickly get a feel for the data in your dataset. We are particularly interested in the variable WaitingDays. You can see that the minimum number of days is -50. This is obviously an error and will need to be removed. Notice the maximum value is 3267890. We would hope people are not having to wait 8953.1 years for an imaging appointment! This will also have to be removed.
 
 Let's filter the data so that the waiting days is not less than zero and not greater than 365 days. Then use the summary function to look at the new maximum and minimum values.
 
-```{r 3.3.16 Filiter for WaitingDays greater than zero and less than 365}
+```{r 3.4.17 Filiter for WaitingDays greater than zero and less than 365}
 ImagWaitTimesFilter<-ImagingWaitTimes%>%
 
 # An and sign, &, can be used to combine criteria
@@ -554,21 +554,21 @@ ImagWaitTimesFilter<-ImagingWaitTimes%>%
 
 Let's check the maximum and minimum values for WaitingDays
 
-```{r 3.3.17 Check the maximum and minimum calues of WaitingDays, echo=TRUE}
+```{r 3.4.18 Check the maximum and minimum calues of WaitingDays, echo=TRUE}
 summary(ImagWaitTimesFilter)
 ```
 
 
 We can see the minimum waiting time is 24 days and the maximum is 63 days. This seems more sensible. Now lets look for missing values.
 
-```{r 3.3.18 Remove the missing values from ImagWaitTmesFilter, echo=TRUE, message=TRUE, warning=FALSE}
+```{r 3.4.19 Remove the missing values from ImagWaitTmesFilter, echo=TRUE, message=TRUE, warning=FALSE}
 ImagWaitTimesFilter%>%
   summarise_all(~sum(is.na(.)))%>%
    view()
 
 ```
 There are 2 missing values in month and 2 in DiagnosticTestDescription. Let's remove these from the dataset.
-```{r 3.3.19 remove the missing values from the ImagWaitTimeFilter dataset}
+```{r 3.4.20 remove the missing values from the ImagWaitTimeFilter dataset}
 # We will give the new object the name WaitTime_Tidy
 WaitTime_Tidy<-ImagWaitTimesFilter%>%
   
@@ -578,20 +578,20 @@ WaitTime_Tidy<-ImagWaitTimesFilter%>%
 We can check that the missing values have been successfully removed.
 
 
-```{r 3.3.20 Check all the missing values have been removed, echo=TRUE}
+```{r 3.4.21 Check all the missing values have been removed, echo=TRUE}
 WaitTime_Tidy%>%
 summarise_all(~sum(is.na(.)))
 ``` 
 ***
 The WaitTime_Tidy data has now been filtered for unusual values and the rows with missing values have been removed. We are now ready to save the sorted data.
 
-```{r 3.3.21 save the object WaitTime_Tidy as a csv file}
+```{r 3.4.22 save the object WaitTime_Tidy as a csv file}
 write_csv(WaitTime_Tidy,"2021-12-02_PU5050_Output/2021-12-12_PU5050_WaitTime_Tidy.csv")
 ```
 ***
 We are now ready to join the data sets. There are many ways to join datasets. You have to have a good understanding of the data and how you want it to join. In our scenario we want all of the waiting time details matched with the corresponding chi number from the demo_date_filter data. To view different types of joins click [here (11).](https://github.com/gadenbuie/tidyexplain#mutating-joins) ) 
 
-```{r 3.3.22 use the inner_join function}
+```{r 3.4.23 use the inner_join function}
 # The inner_join function will combine all the data in WaitTimeTidy with the 
 # relevant demo_date_filter observations with the same chi value.
 join_demo_wait <- inner_join(WaitTime_Tidy,demo_date_filter, by = "chi")%>%
@@ -602,7 +602,7 @@ view()
 
 We will now check that the data has combined correctly.
 
-```{r 3.3.23 inspect the join_demo_wait dataset, echo=TRUE}
+```{r 3.4.23 inspect the join_demo_wait dataset, echo=TRUE}
 glimpse(join_demo_wait)
 ```
 We have 8 variables and they have been combined by the chi variable.
