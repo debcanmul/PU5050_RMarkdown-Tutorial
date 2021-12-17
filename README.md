@@ -76,7 +76,7 @@ Tidyverse
 here
 
 
-DATA-SPECIFIC INFORMATION FOR: [Demographics]
+DATA-SPECIFIC INFORMATION FOR: [2021-12-02_PU5050_Demographics]
 
 
 1. Number of variables: 4
@@ -89,7 +89,7 @@ See Data_Dictionary_Demographics
 4. Missing data codes: 
   NA
 
-DATA-SPECIFIC INFORMATION FOR: [ImagingWaitTimes]
+DATA-SPECIFIC INFORMATION FOR: [2021-12-02_PU5050_ImagingWaitTimes]
 
 
 1. Number of variables: 5
@@ -101,6 +101,22 @@ See Data_Dictionary_ImagingWaitTimes
 
 4. Missing data codes: 
   NA
+
+DATA-SPECIFIC INFORMATION FOR: [2021-12-11_PU5050_Demo_Filtered]
+1. Number of variable 4
+2. Number of cases/rows: 94
+3. Variable List:
+Same variables  as Data_Dictionary_Demographics
+4. Missing data codes:
+The missing data has been removed from this file.
+
+DATA-SPECIFIC INFORMATION FOR: [2021-12-12_PU5050_WaitTime_Tidy]
+1. Number of variable 5
+2. Number of cases/rows: 95
+3. Variable List:
+Same variables  as Data_Dictionary_ImagingWaitTimes
+4. Missing data codes:
+The missing data has been removed from this file.
 
 COLLABORATION
 GitHub - Humpty Dumpty would add the GitHub repository https address here.
